@@ -1,10 +1,11 @@
 import express from 'express'
+import { usersRoutes } from '../modules/Users/users.routes'
 const router = express.Router()
 
 const moduleRoutes: any[] = [
   {
-    path: '/',
-    route: doctorRoutes,
+    path: '/users',
+    route: usersRoutes,
   },
 ]
 
