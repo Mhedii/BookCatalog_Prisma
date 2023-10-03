@@ -1,8 +1,20 @@
 {
   "name": "Assignment-8_Prisma",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.ts",
   "license": "MIT",
+  "scripts": {
+    "start": "node src/server.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "lint:check": "eslint --ignore-path .eslintignore --ext .js,.ts .",
+    "lint:fix": "eslint . --fix",
+    "prettier:check": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
+    "prettier:fix": "prettier --write .",
+    "lint-prettier": "yarn lint:check && yarn prettier:check",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "prisma generate"
+  },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
@@ -10,11 +22,12 @@
     "@types/node": "^20.4.9",
     "eslint-config-prettier": "^9.0.0",
     "prettier": "^3.0.1",
-    "prisma": "^5.2.0",
+    "prisma": "^5.3.1",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.1.6"
   },
+  "type": "module",
   "dependencies": {
     "@prisma/client": "5.2.0",
     "@types/jsonwebtoken": "^9.0.3",
@@ -28,6 +41,7 @@
     "http-status": "^1.6.2",
     "husky": "^8.0.3",
     "jsonwebtoken": "^9.0.2",
-    "lint-staged": "^13.2.3"
+    "lint-staged": "^13.2.3",
+    "node": "^20.7.0"
   }
 }
