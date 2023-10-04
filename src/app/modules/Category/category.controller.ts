@@ -7,7 +7,11 @@ import { categoryService } from './category.service';
 const createCategory = catchAsync(async (req: Request, res: Response) => {
   try {
     const data = req.body;
-    const result = await categoryService.createCategory(data);
+    const token = req.headers.authorization;
+    if (!token) {
+      return;
+    }
+    const result = await categoryService.createCategory(data, token);
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
@@ -18,4 +22,14 @@ const createCategory = catchAsync(async (req: Request, res: Response) => {
     console.log(error);
   }
 });
-export const categoryController = { createCategory };
+
+const getCategories = catchAsync(async (req: Request, res: Response) => {
+  const result = await categoryService.getCategories();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Categories fetched successfully',
+    data: result,
+  });
+});
+export const categoryController = { createCategory, getCategories };
