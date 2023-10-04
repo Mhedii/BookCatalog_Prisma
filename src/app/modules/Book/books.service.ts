@@ -18,7 +18,6 @@ const getBooks = async (
   maxPrice: number,
   filtersData: Record<string, unknown>,
 ): Promise<Book[] | any> => {
-  console.log(minPrice, maxPrice);
   const result = await prisma.book.findMany({
     where: {
       AND: [
@@ -84,6 +83,37 @@ const getSingleBook = async (id: string): Promise<Book | null> => {
   });
   return result;
 };
+const getBookByCategory = async (
+  id: string,
+  page: number,
+  size: number,
+): Promise<Book[] | any> => {
+  const result = await prisma.book.findMany({
+    where: {
+      categoryId: id,
+    },
+    take: size,
+    skip: (page - 1) * size,
+  });
+
+  const total = await prisma.book.count({
+    where: {
+      categoryId: id,
+    },
+  });
+
+  const totalPage = await (Math.floor(total / size) | 1);
+
+  return {
+    meta: {
+      page,
+      size,
+      total,
+      totalPage,
+    },
+    result,
+  };
+};
 const updateBook = async (
   id: string,
   payload: Partial<Book>,
@@ -106,4 +136,5 @@ export const BookService = {
   getSingleBook,
   updateBook,
   deleteBook,
+  getBookByCategory,
 };
