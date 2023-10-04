@@ -28,7 +28,7 @@ const getBooks = catchAsync(async (req: Request, res: Response) => {
     sortBy = 'price',
     sortOrder = 'asc',
     searchTerm = '',
-    // ...filtersData
+    ...filtersData
   } = req.query;
   const result = await BookService.getBooks(
     Number(page),
@@ -37,7 +37,7 @@ const getBooks = catchAsync(async (req: Request, res: Response) => {
     sortBy as string,
     sortOrder as 'asc' | 'desc',
     searchTerm as string,
-    //   filtersData as Record<string, unknown>,
+    filtersData as Record<string, unknown>,
   );
   sendResponse(res, {
     statusCode: httpStatus.OK,

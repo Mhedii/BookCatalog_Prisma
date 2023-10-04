@@ -16,26 +16,36 @@ const getBooks = async (
   //   minPrice:number,
   //   maxPrice:number,
   searchTerm: string,
-  //   filtersData: Record<string, unknown>,
+  filtersData: Record<string, unknown>,
 ): Promise<Book[] | any> => {
   const result = await prisma.book.findMany({
     where: {
-      OR: [
+      AND: [
         {
-          title: {
-            contains: searchTerm,
-            mode: 'insensitive',
-          },
+          OR: [
+            {
+              title: {
+                contains: searchTerm,
+                mode: 'insensitive',
+              },
+            },
+            {
+              author: {
+                contains: searchTerm,
+                mode: 'insensitive',
+              },
+            },
+            {
+              genre: {
+                contains: searchTerm,
+                mode: 'insensitive',
+              },
+            },
+          ],
         },
         {
-          author: {
-            contains: searchTerm,
-            mode: 'insensitive',
-          },
-        },
-        {
-          genre: {
-            contains: searchTerm,
+          categoryId: {
+            equals: filtersData.category as string,
             mode: 'insensitive',
           },
         },
@@ -49,12 +59,14 @@ const getBooks = async (
     },
   });
   const total = await prisma.book.count();
+
+  const totalPage = await (Math.floor(total / size) | 1);
   return {
     meta: {
       page,
       size,
       total,
-      //   totalPage,
+      totalPage,
     },
     result,
   };
