@@ -8,9 +8,56 @@ const createBook = async (data: Book): Promise<Book> => {
   });
   return result;
 };
-const getBooks = async (): Promise<Book[] | null> => {
-  const result = await prisma.book.findMany({});
-  return result;
+const getBooks = async (
+  page: number,
+  size: number,
+  sortBy: string,
+  sortOrder: 'asc' | 'desc',
+  //   minPrice:number,
+  //   maxPrice:number,
+  searchTerm: string,
+  //   filtersData: Record<string, unknown>,
+): Promise<Book[] | any> => {
+  const result = await prisma.book.findMany({
+    where: {
+      OR: [
+        {
+          title: {
+            contains: searchTerm,
+            mode: 'insensitive',
+          },
+        },
+        {
+          author: {
+            contains: searchTerm,
+            mode: 'insensitive',
+          },
+        },
+        {
+          genre: {
+            contains: searchTerm,
+            mode: 'insensitive',
+          },
+        },
+      ],
+    },
+
+    take: size,
+    skip: (page - 1) * size,
+    orderBy: {
+      [sortBy]: sortOrder,
+    },
+  });
+  const total = await prisma.book.count();
+  return {
+    meta: {
+      page,
+      size,
+      total,
+      //   totalPage,
+    },
+    result,
+  };
 };
 const getSingleBook = async (id: string): Promise<Book | null> => {
   const result = await prisma.book.findUnique({

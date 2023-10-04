@@ -22,7 +22,23 @@ const createBook = async (req: Request, res: Response) => {
   }
 };
 const getBooks = catchAsync(async (req: Request, res: Response) => {
-  const result = await BookService.getBooks();
+  const {
+    page = 1,
+    size = 10,
+    sortBy = 'price',
+    sortOrder = 'asc',
+    searchTerm = '',
+    // ...filtersData
+  } = req.query;
+  const result = await BookService.getBooks(
+    Number(page),
+    Number(size),
+    // Number(sortBy),
+    sortBy as string,
+    sortOrder as 'asc' | 'desc',
+    searchTerm as string,
+    //   filtersData as Record<string, unknown>,
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
