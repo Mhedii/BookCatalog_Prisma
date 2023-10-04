@@ -3,12 +3,21 @@ import { usersRoutes } from '../modules/Users/users.routes';
 import { categoryRoutes } from '../modules/Category/category.routes';
 import { authRoutes } from '../modules/Auth/auth.routes';
 import { booksRoutes } from '../modules/Book/books.routes';
+import { orderRoutes } from '../modules/Order/orders.routes';
 const router = express.Router();
 
 const moduleRoutes: any[] = [
   {
     path: '/users',
     route: usersRoutes,
+  },
+  {
+    path: '/categories',
+    route: categoryRoutes,
+  },
+  {
+    path: '/orders',
+    route: orderRoutes,
   },
   {
     path: '/categories',
