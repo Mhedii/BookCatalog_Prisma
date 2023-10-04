@@ -13,11 +13,12 @@ const getBooks = async (
   size: number,
   sortBy: string,
   sortOrder: 'asc' | 'desc',
-  //   minPrice:number,
-  //   maxPrice:number,
   searchTerm: string,
+  minPrice: number,
+  maxPrice: number,
   filtersData: Record<string, unknown>,
 ): Promise<Book[] | any> => {
+  console.log(minPrice, maxPrice);
   const result = await prisma.book.findMany({
     where: {
       AND: [
@@ -47,6 +48,12 @@ const getBooks = async (
           categoryId: {
             equals: filtersData.category as string,
             mode: 'insensitive',
+          },
+        },
+        {
+          price: {
+            gte: minPrice,
+            lte: maxPrice,
           },
         },
       ],

@@ -28,15 +28,18 @@ const getBooks = catchAsync(async (req: Request, res: Response) => {
     sortBy = 'price',
     sortOrder = 'asc',
     searchTerm = '',
+    minPrice = 0,
+    maxPrice = 50000,
     ...filtersData
   } = req.query;
   const result = await BookService.getBooks(
     Number(page),
     Number(size),
-    // Number(sortBy),
     sortBy as string,
     sortOrder as 'asc' | 'desc',
     searchTerm as string,
+    Number(minPrice),
+    Number(maxPrice),
     filtersData as Record<string, unknown>,
   );
   sendResponse(res, {
