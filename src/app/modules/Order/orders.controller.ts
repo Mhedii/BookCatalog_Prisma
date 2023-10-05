@@ -1,8 +1,8 @@
+import { orderService } from './orders.service';
 import { Request, Response } from 'express';
 import catchAsync from '../../shared/catchAsync';
 import sendResponse from '../../shared/sendResponses';
 import httpStatus from 'http-status';
-import { orderService } from './orders.service';
 
 const createOrder = catchAsync(async (req: Request, res: Response) => {
   try {
@@ -38,19 +38,23 @@ const getOrders = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-// const getSpecificOrder = catchAsync(async (req: Request, res: Response) => {
-//   const { id } = req.params;
-//   const result = await orderService.getSpecificOrder(id);
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: 'Order retrived successfully',
-//     data: result,
-//   });
-// });
+const getOrderById = async (req: Request, res: Response) => {
+  const orderId = req.params.orderId;
+  const token = req.headers.authorization;
+  if (!token) {
+    return;
+  }
+  const result = await orderService.getOrderById(orderId, token);
 
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Orders fetched successfully',
+    data: result,
+  });
+};
 export const orderController = {
   createOrder,
   getOrders,
-  //   getSpecificOrder,
+  getOrderById,
 };

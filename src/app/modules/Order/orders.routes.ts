@@ -4,8 +4,6 @@ import { orderController } from './orders.controller';
 const router = express.Router();
 router.post('/create-order', orderController.createOrder);
 router.get('/', orderController.getOrders);
-// router.get('/:id', categoryController.getSingleCategory);
-// router.patch('/:id', categoryController.updateCategory);
-// router.delete('/:id', categoryController.deleteCategory);
+router.get('/:orderId', orderController.getOrderById);
 
 export const orderRoutes = router;

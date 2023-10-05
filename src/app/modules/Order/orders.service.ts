@@ -56,16 +56,26 @@ const getOrders = async (token: string): Promise<Order[] | null> => {
     return result;
   }
 };
-//   const getSingleCategory = async (id: string): Promise<Category | null> => {
-//     const result = await prisma.category.findUnique({
-//       where: { id },
-//       include: { Book: true },
-//     });
-//     return result;
-//   };
 
+const getOrderById = async (orderId: string, token: string) => {
+  const decodedToken = jwtHelpers.decodeToken(token);
+  const { id, role } = decodedToken;
+  if (role === 'admin') {
+    const result = await prisma.order.findMany({
+      where: { id: orderId },
+      include: { orderedBooks: true },
+    });
+    return result;
+  } else {
+    const result = await prisma.order.findMany({
+      where: { id: orderId, userId: id },
+      include: { orderedBooks: true },
+    });
+    return result;
+  }
+};
 export const orderService = {
   createOrder,
   getOrders,
-  // getSingleOrder,
+  getOrderById,
 };
