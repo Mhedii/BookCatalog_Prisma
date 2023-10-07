@@ -1,8 +1,8 @@
 class ApiError extends Error {
-  success: boolean;
+  success: boolean | number;
   stack?: string;
   constructor(
-    success: boolean,
+    success: boolean | number,
     message: string | undefined,
     stack = '' || undefined,
   ) {
